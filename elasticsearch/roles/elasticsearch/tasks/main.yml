@@ -1,0 +1,90 @@
+---
+#
+# Installing Elasticsearch
+#
+
+# Add Elasticsearch apt key
+
+- name: Add Elasticsearch apt key
+  apt_key:
+   url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+   state: present
+
+# Add the Elasticsearch apt repo. For versions 7 of the stack - use '7.x-prerelease':
+
+- name: Adding Elasticsearch repo
+  apt_repository:
+   repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+   state: present
+   filename: elastic-7.x.list
+   update_cache: yes
+
+# Installing Transport
+
+- name: Install APT Transport https
+  apt:
+   name: apt-transport-https
+   update_cache: yes
+
+# Installing Elasticsearch
+
+- name: Install Elasticsearch
+  apt:
+   name: elasticsearch
+   update_cache: yes
+
+# Update Elasticsearch cluster name in config file 
+
+- name: Update descriptive name for cluster 
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'cluster.name:'
+   line: 'cluster.name: ELKSTACK-Monitoring'
+   
+# Update Elasticsearch node in config file 
+
+- name: Update descriptive node name for cluster
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'node.name:'
+   line: 'node.name: servername'
+   
+# Update Elasticsearch config file to allow access (to secure Elasticsearch, bind to 'localhost'). 
+
+- name: Updating the config file to allow outside access
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'network.host:'
+   line: 'network.host: 172.21.37.20'
+ 
+# Update Elasticsearch port in config file 
+
+- name: Updating the port in config file 
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'http.port:'
+   line: 'http.port: 9200'
+   
+# Update Elasticsearch Discovery in config file 
+
+- name: Updating the port in config file 
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'discovery.seed_hosts:'
+   line: discovery.seed_hosts: ["host1", "host2"]'
+
+# Update Elasticsearch Cluster  in config file 
+
+- name: Updating the port in config file 
+  lineinfile:
+   destfile: /etc/elasticsearch/elasticsearch.yml
+   regexp: 'cluster.initial_master_nodes:'
+   line: cluster.initial_master_nodes: ["node1", "node2"]'
+ 
+# Start Elasticsearch
+- name: Starting Elasticsearch
+  service:
+   name: elasticsearch
+   state: started
+    
+
