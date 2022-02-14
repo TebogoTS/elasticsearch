@@ -55,7 +55,7 @@
   lineinfile:
    destfile: /etc/elasticsearch/elasticsearch.yml
    regexp: 'network.host:'
-   line: 'network.host: 172.21.37.20'
+   line: 'network.host: {IP_Address}'
  
 # Update Elasticsearch port in config file 
 
@@ -63,7 +63,7 @@
   lineinfile:
    destfile: /etc/elasticsearch/elasticsearch.yml
    regexp: 'http.port:'
-   line: 'http.port: 9200'
+   line: 'http.port: {ELASTIC_PORT}'
    
 # Update Elasticsearch Discovery in config file 
 
